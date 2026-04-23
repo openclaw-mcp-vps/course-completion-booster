@@ -1,0 +1,39 @@
+// Informational schema only for data model reference.
+// Runtime persistence in this project uses JSON storage in lib/database.ts.
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model StudentProgress {
+  id               String   @id @default(uuid())
+  studentId        String
+  studentEmail     String
+  courseId         String
+  courseName       String
+  platform         String
+  progressPercent  Float
+  engagementScore  Float
+  riskScore        Float
+  nudgesSent       Int
+  lastActiveAt     DateTime
+  lastNudgedAt     DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([studentId, courseId, platform])
+}
+
+model NudgeLog {
+  id             String   @id @default(uuid())
+  studentId      String
+  studentEmail   String
+  courseId       String
+  channel        String
+  templateKey    String
+  reason         String
+  message        String
+  providerStatus String
+  sentAt         DateTime @default(now())
+}
